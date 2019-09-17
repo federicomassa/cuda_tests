@@ -20,13 +20,18 @@ indent_mode=2
 [project]
 name=project
 base_path=/home/nvidia/cuda_tests/cuda_by_example/ch3
+description=
 
 [long line marker]
 long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=3
+FILE_NAME_0=0;CUDA;0;EUTF-8;1;1;0;%2Fhome%2Fnvidia%2Fcuda_tests%2Fcuda_by_example%2Fch3%2Fadd.cu;0;4
+FILE_NAME_1=860;CUDA;0;EUTF-8;1;1;0;%2Fhome%2Fnvidia%2Fcuda_tests%2Fcuda_by_example%2Fch3%2Fdevice_info.cu;0;4
+FILE_NAME_2=2601;CUDA;0;EUTF-8;1;1;0;%2Fhome%2Fnvidia%2FCUDA-by-Example-source-code-for-the-book-s-examples-%2Fchapter03%2Fenum_gpu.cu;0;4
+FILE_NAME_3=274;CUDA;0;EUTF-8;1;1;0;%2Fhome%2Fnvidia%2Fcuda_tests%2Fcuda_by_example%2Fch4%2Fsum_vec.cu;0;4
 
 [VTE]
 last_dir=/home/nvidia
