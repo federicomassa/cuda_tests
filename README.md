@@ -1,0 +1,2 @@
+My first tests on CUDA.
+In cuda_by_example folder you can find some examples taken from the book "CUDA by example: an Introduction to General-Purpose Gpu Programming" and changed a bit to test more stuff.

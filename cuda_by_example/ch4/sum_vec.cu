@@ -3,7 +3,7 @@
 #include <chrono>
 #include <sstream>
 
-const long N = 20000000;
+const long N = 10000000;
 const int THREADS = 512;
 const int BLOCKS = std::ceil(double(N)/double(THREADS));
 //const int BLOCKS = 512;
