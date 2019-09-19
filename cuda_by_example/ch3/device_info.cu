@@ -40,6 +40,7 @@ int main() {
         printf( "Shared mem per mp:  %ld\n", prop.sharedMemPerBlock );
         printf( "Registers per mp:  %d\n", prop.regsPerBlock );
         printf( "Threads in warp:  %d\n", prop.warpSize );
+	printf( "Threads per mp:  %d\n", prop.maxThreadsPerMultiProcessor);
         printf( "Max threads per block:  %d\n",
                     prop.maxThreadsPerBlock );
         printf( "Max thread dimensions:  (%d, %d, %d)\n",

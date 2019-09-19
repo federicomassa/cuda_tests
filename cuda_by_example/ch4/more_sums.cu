@@ -12,7 +12,9 @@ void add(int* a, int* b, int* c) {
 	int tid = 0;
 	
 	while (tid < N) {
-	  c[tid] =  a[tid] + b[tid];
+	  for (int i = 0; i < 10; i++) {
+	    c[tid] =  i*a[tid] + b[tid];
+	  }
 	  tid++;
 	}
 }
@@ -21,7 +23,9 @@ __global__
 void add_gpu(int* a, int* b, int* c) {
 	int tid = threadIdx.x + blockIdx.x*blockDim.x;
 	while (tid < N) {
-	  c[tid] =  a[tid] + b[tid];
+	  for (int i = 0; i < 10; i++) {
+	    c[tid] =  i*a[tid] + b[tid];
+	  }
 	  tid += blockDim.x*gridDim.x;
 	}
 }
