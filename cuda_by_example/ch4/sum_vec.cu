@@ -3,9 +3,10 @@
 #include <chrono>
 #include <sstream>
 
-long N = 20000000;
-int THREADS = 256;
-int BLOCKS = std::ceil(double(N)/double(THREADS));
+const long N = 20000000;
+const int THREADS = 512;
+const int BLOCKS = std::ceil(double(N)/double(THREADS));
+//const int BLOCKS = 512;
 
 void add(int* a, int* b, int* c) {
 	int tid = 0;
@@ -17,9 +18,9 @@ void add(int* a, int* b, int* c) {
 }
 
 __global__
-void add_gpu(int* a, int* b, int* c, long* N) {
+void add_gpu(int* a, int* b, int* c) {
 	int tid = threadIdx.x + blockIdx.x*blockDim.x;
-	while (tid < *N) { 
+	while (tid < N) { 
 		c[tid] =  a[tid] + b[tid];
 		tid += blockDim.x*gridDim.x;
 	}
@@ -36,7 +37,7 @@ void cpu_test() {
 	
 	for (int i = 0; i < N; i++) {
 		a[i] = -i;
-		b[i] = i*i;
+		b[i] = i+2;
 	}
 	
 	printf("Starting CPU benchmark...\n");
@@ -46,8 +47,9 @@ void cpu_test() {
 	auto t1 = Time::now();
 	
 	
-    fsec fs = t1 - t0;
-	std::cout << "CPU took: " << fs.count() << " s\n";	
+	fsec fs = t1 - t0;
+	std::cout << "CPU took: " << fs.count() << " s\n";
+	std::cout << "Test: central index is: " << c[N/2] << std::endl;
 
 	delete a, b, c;
 }
@@ -55,17 +57,13 @@ void cpu_test() {
 void gpu_test() {
 	printf("Starting GPU benchmark...\n");
 	
-	long* dev_N;
-	cudaMalloc((void**)&dev_N, sizeof(long));
-	cudaMemcpy(dev_N, &N, sizeof(long), cudaMemcpyHostToDevice);
-	
 	int* a = new int[N];
 	int* b = new int[N];
 	int* c = new int[N];
 	
 	for (int i = 0; i < N; i++) {
 		a[i] = -i;
-		b[i] = i*i;
+		b[i] = i+2;
 	}
 	
 	int* dev_a, *dev_b, *dev_c;
@@ -75,29 +73,26 @@ void gpu_test() {
 	
 	HANDLE_ERROR(cudaMemcpy(dev_a, a, N*sizeof(int), cudaMemcpyHostToDevice));
 	HANDLE_ERROR(cudaMemcpy(dev_b, b, N*sizeof(int), cudaMemcpyHostToDevice));
-	HANDLE_ERROR(cudaMemcpy(dev_c, c, N*sizeof(int), cudaMemcpyHostToDevice));
 	
 	// Add and transfer result to CPU
 	auto t0 = Time::now();
 
-	add_gpu<<<THREADS,THREADS>>>(dev_a, dev_b, dev_c, dev_N);
+	add_gpu<<<BLOCKS,THREADS>>>(dev_a, dev_b, dev_c);
 	
 	auto t1 = Time::now();
 	
-	HANDLE_ERROR(cudaMemcpy(a, dev_a, N*sizeof(int), cudaMemcpyDeviceToHost));
-	HANDLE_ERROR(cudaMemcpy(b, dev_b, N*sizeof(int), cudaMemcpyDeviceToHost));
 	HANDLE_ERROR(cudaMemcpy(c, dev_c, N*sizeof(int), cudaMemcpyDeviceToHost));
 	auto t2 = Time::now();
 	
 	fsec fs = t1 - t0;
 	fsec fs2 = t2 - t1;
 
-	printf("GPU took %f s (%f to sum + %f to retrieve data from device)", (fs + fs2).count(), fs.count(), fs2.count());
+	printf("GPU took %f s (%f to sum + %f to retrieve data from device)\n", (fs + fs2).count(), fs.count(), fs2.count());
+	std::cout << "Test: central index is: " << c[N/2] << std::endl;
 	
 	cudaFree(dev_a);
 	cudaFree(dev_b);
 	cudaFree(dev_c);
-	cudaFree(dev_N);
 	
 	delete a,b,c;
 }
