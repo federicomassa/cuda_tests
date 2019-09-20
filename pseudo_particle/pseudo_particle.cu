@@ -294,7 +294,7 @@ int main(int argc, char** argv) {
   ss.clear();
 
   printf("==================================================================\n");
-  printf("Dummy particle filter generator with %d particles, and a %dx%d map\n", nParticles, sizeX, sizeY);
+  printf("Dummy particle filter generator with %d particles, a %dx%d map, %d laser scan points\n", nParticles, sizeX, sizeY, laserPoints);
   printf("==================================================================\n\n");
   
   // Allocate dummy map, vectorized, indicating the index of the closest black pixel in the map
