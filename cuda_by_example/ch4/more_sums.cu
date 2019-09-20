@@ -82,7 +82,7 @@ void gpu_test() {
 	auto t0 = Time::now();
 
 	add_gpu<<<BLOCKS,THREADS>>>(dev_a, dev_b, dev_c);
-	
+	cudaDeviceSynchronize();
 	auto t1 = Time::now();
 	
 	HANDLE_ERROR(cudaMemcpy(c, dev_c, N*sizeof(int), cudaMemcpyDeviceToHost));
